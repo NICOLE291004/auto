@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Fragment } from "react";
 import { Guardar, inputCls } from "@/components/admin/ui";
 import { IconCheck, IconEstrella } from "@/components/icons";
 import { SiteFooter, SiteHeader } from "@/components/SiteChrome";
@@ -65,13 +66,13 @@ export default async function ResenaPage({
           <legend className="mb-2 text-sm font-bold text-muted">Tu calificación</legend>
           <div className="estrellas">
             {[5, 4, 3, 2, 1].map((n) => (
-              <span key={n} className="contents">
+              <Fragment key={n}>
                 <input type="radio" name="estrellas" id={`e${n}`} value={n} required />
                 <label htmlFor={`e${n}`} title={`${n} ${n === 1 ? "estrella" : "estrellas"}`}>
                   <span className="sr-only">{n} {n === 1 ? "estrella" : "estrellas"}</span>
                   <IconEstrella width={44} height={44} />
                 </label>
-              </span>
+              </Fragment>
             ))}
           </div>
         </fieldset>
