@@ -234,9 +234,12 @@ export default async function Home() {
             </h2>
             <div className="mt-5 space-y-4 text-lg leading-relaxed text-muted">
               <p>
-                Llevamos años en esto y sabemos que comprar una pieza usada da desconfianza. Por eso
-                trabajamos de frente: te explicamos cada paso, te mandamos fotos y
-                respondemos por WhatsApp cuando nos necesites.
+                Llevamos años en esto y{" "}
+                <mark className="rounded-md bg-senal/60 px-1.5 py-0.5 font-bold text-ink [box-decoration-break:clone]">
+                  sabemos que comprar una pieza usada genera desconfianza.
+                </mark>{" "}
+                Por eso trabajamos de frente: te explicamos cada paso, te mandamos fotos y respondemos por
+                WhatsApp cuando nos necesites.
               </p>
               <p>
                 Nos preocupamos por tus piezas como si fueran nuestras. Tú dinos qué necesitas y
