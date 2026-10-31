@@ -7,7 +7,10 @@ import { requireAdmin } from "@/lib/auth";
 import { getCoincidencias, type Pedido } from "@/lib/admin/data";
 import { ESTADOS_PEDIDO, etiquetaOrigen } from "@/lib/admin/labels";
 import { rangoAnios } from "@/lib/piezas";
+import { siteUrl } from "@/lib/catalogo";
+import { mensajeResena, urlResena } from "@/lib/resenas";
 import { waCliente } from "@/lib/whatsapp";
+import { solicitarResena } from "../../resenas/actions";
 import { actualizarPedido } from "../actions";
 
 export default async function PedidoPage({
@@ -28,6 +31,13 @@ export default async function PedidoPage({
   const fotoUrl = p.foto_path
     ? (await db.storage.from("pedidos").createSignedUrl(p.foto_path, 3600)).data?.signedUrl
     : null;
+  const { data: resenaData } = await db
+    .from("resenas")
+    .select("token, estado")
+    .eq("pedido_id", p.id)
+    .maybeSingle();
+  const resena = resenaData as { token: string; estado: string } | null;
+  const enlaceResena = resena ? urlResena(siteUrl(), resena.token) : null;
   const coincidencias = (await getCoincidencias(db)).find((c) => c.pedido.id === p.id)?.piezas ?? [];
 
   return (
@@ -77,6 +87,52 @@ export default async function PedidoPage({
               </li>
             ))}
           </ul>
+        </div>
+      )}
+
+      {p.estado === "vendido" && (
+        <div className="rounded-3xl bg-white p-4">
+          <p className="font-bold">Reseña del cliente</p>
+          {!resena ? (
+            <>
+              <p className="mb-3 text-muted">Genera un enlace único para que el cliente deje su reseña.</p>
+              <form action={solicitarResena.bind(null, p.id)}>
+                <button className="w-full rounded-2xl bg-azul px-4 py-3 font-bold text-white hover:bg-azul-hondo">
+                  Pedir reseña
+                </button>
+              </form>
+            </>
+          ) : (
+            <>
+              <p className="mb-2 text-muted">
+                Estado:{" "}
+                {{
+                  solicitada: "esperando respuesta del cliente",
+                  pendiente: "recibida, falta aprobarla",
+                  aprobada: "publicada en el sitio",
+                  rechazada: "rechazada",
+                }[resena.estado] ?? resena.estado}
+              </p>
+              {resena.estado === "solicitada" && enlaceResena && (
+                <div className="space-y-2">
+                  <input readOnly value={enlaceResena} className={inputCls} aria-label="Enlace de reseña" />
+                  <a
+                    href={waCliente(p.cliente_whatsapp, mensajeResena(p.cliente_nombre, enlaceResena))}
+                    target="_blank"
+                    rel="noopener"
+                    className="flex items-center justify-center gap-2 rounded-2xl bg-wa px-4 py-3 font-bold text-white"
+                  >
+                    <IconWhatsApp width={20} height={20} /> Mandar por WhatsApp
+                  </a>
+                </div>
+              )}
+              {resena.estado === "pendiente" && (
+                <Link href="/admin/resenas" className="font-bold text-azul underline">
+                  Ir a aprobarla
+                </Link>
+              )}
+            </>
+          )}
         </div>
       )}
 

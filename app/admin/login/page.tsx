@@ -1,3 +1,4 @@
+import { Logo } from "@/components/Logo";
 import { iniciarSesion } from "./actions";
 
 const MENSAJES: Record<string, string> = {
@@ -14,10 +15,8 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
     <main className="flex min-h-dvh items-center justify-center bg-niebla px-4">
       <form action={iniciarSesion} className="w-full max-w-sm space-y-4 rounded-3xl bg-white p-6 shadow-xl">
         <div className="flex items-center gap-2.5">
-          <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-azul font-display text-xl font-extrabold text-white">
-            A
-          </span>
-          <h1 className="font-display text-2xl font-extrabold">Panel Alex</h1>
+          <Logo className="h-11 w-auto" />
+          <h1 className="font-display text-2xl font-extrabold">Panel <span className="text-rojo">Alex</span></h1>
         </div>
         {error && (
           <p role="alert" className="rounded-xl bg-rojo/10 px-4 py-3 text-[15px] font-semibold text-rojo-hondo">

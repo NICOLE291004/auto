@@ -7,6 +7,9 @@ const OK: Record<string, string> = {
   vendida: "Pieza marcada como vendida.",
   eliminada: "Pieza eliminada.",
   eliminado: "Yunkero eliminado.",
+  resena: "Enlace de reseña listo. Mándaselo al cliente.",
+  resena_aprobada: "Reseña publicada en el sitio.",
+  resena_rechazada: "Reseña retirada.",
 };
 
 const ERRORES: Record<string, string> = {

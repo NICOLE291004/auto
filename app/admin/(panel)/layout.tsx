@@ -6,6 +6,13 @@ export const dynamic = "force-dynamic";
 
 export default async function PanelLayout({ children }: { children: React.ReactNode }) {
   const { db } = await requireAdmin();
-  const coincidencias = await getCoincidencias(db);
-  return <AdminShell coincidencias={coincidencias.length}>{children}</AdminShell>;
+  const [coincidencias, { count: pendientes }] = await Promise.all([
+    getCoincidencias(db),
+    db.from("resenas").select("*", { count: "exact", head: true }).eq("estado", "pendiente"),
+  ]);
+  return (
+    <AdminShell coincidencias={coincidencias.length} resenasPendientes={pendientes ?? 0}>
+      {children}
+    </AdminShell>
+  );
 }

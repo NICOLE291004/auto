@@ -1,6 +1,7 @@
+import { Logo } from "@/components/Logo";
 import Link from "next/link";
 import { cerrarSesion } from "@/app/admin/login/actions";
-import { IconCampana, IconEntrega, IconGente, IconLista, IconPanel } from "@/components/icons";
+import { IconCampana, IconEntrega, IconEstrella, IconGente, IconLista, IconPanel } from "@/components/icons";
 
 const ITEMS = [
   { href: "/admin", label: "Inicio", icon: IconPanel },
@@ -8,17 +9,24 @@ const ITEMS = [
   { href: "/admin/piezas", label: "Piezas", icon: IconEntrega },
   { href: "/admin/yunkeros", label: "Yunkeros", icon: IconGente },
   { href: "/admin/coincidencias", label: "Coincid.", icon: IconCampana },
+  { href: "/admin/resenas", label: "Reseñas", icon: IconEstrella },
 ] as const;
 
-export function AdminShell({ children, coincidencias }: { children: React.ReactNode; coincidencias: number }) {
+export function AdminShell({
+  children,
+  coincidencias,
+  resenasPendientes,
+}: {
+  children: React.ReactNode;
+  coincidencias: number;
+  resenasPendientes: number;
+}) {
   return (
     <div className="min-h-dvh bg-niebla/60 pb-24 md:pb-0 md:pl-56">
       <aside className="fixed inset-x-0 bottom-0 z-40 border-t border-linea bg-white md:inset-y-0 md:left-0 md:right-auto md:w-56 md:border-r md:border-t-0">
         <div className="hidden items-center gap-2.5 p-5 md:flex">
-          <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-azul font-display text-lg font-extrabold text-white">
-            A
-          </span>
-          <span className="font-display text-lg font-extrabold">Panel Alex</span>
+          <Logo className="h-11 w-auto" />
+          <span className="font-display text-lg font-extrabold">Panel <span className="text-rojo">Alex</span></span>
         </div>
         <nav className="flex md:flex-col md:px-3">
           {ITEMS.map(({ href, label, icon: Icon }) => (
@@ -29,11 +37,14 @@ export function AdminShell({ children, coincidencias }: { children: React.ReactN
             >
               <Icon width={22} height={22} />
               {label}
-              {href === "/admin/coincidencias" && coincidencias > 0 && (
-                <span className="absolute right-[22%] top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-rojo px-1 text-[11px] font-bold text-white md:static md:ml-auto">
-                  {coincidencias}
-                </span>
-              )}
+              {(() => {
+                const n = href === "/admin/coincidencias" ? coincidencias : href === "/admin/resenas" ? resenasPendientes : 0;
+                return n > 0 ? (
+                  <span className="absolute right-[18%] top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-rojo px-1 text-[11px] font-bold text-white md:static md:ml-auto">
+                    {n}
+                  </span>
+                ) : null;
+              })()}
             </Link>
           ))}
         </nav>

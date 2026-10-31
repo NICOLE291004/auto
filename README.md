@@ -22,7 +22,8 @@ igual puede continuar por WhatsApp.
 1. Crea un proyecto en supabase.com.
 2. En **SQL Editor** ejecuta, en orden, [`0001_init.sql`](supabase/migrations/0001_init.sql) (tablas, vista pública,
    políticas RLS y buckets `piezas` público y `pedidos` privado) y [`0002_ingesta.sql`](supabase/migrations/0002_ingesta.sql)
-   (bandeja de la Fase 3; es opcional hasta que se active).
+   (bandeja de la Fase 3; es opcional hasta que se active). Para las reseñas corre también
+   [`0003_resenas.sql`](supabase/migrations/0003_resenas.sql).
 3. Opcional, solo desarrollo: ejecuta `supabase/seed.sql` para ver piezas de ejemplo.
 4. Copia la URL, la `anon key` y la `service_role key` a `.env.local` (ver `.env.example`).
 
@@ -54,6 +55,23 @@ Qué hay en el panel:
 - **Yunkeros:** privados.
 - **Coincidencias:** pedidos abiertos (nuevo o cotizado) con una pieza vigente de la misma marca, modelo, año y tipo de pieza.
   Se calculan al abrir el panel, así que una pieza nueva dispara la alerta de inmediato (lógica en `lib/matching.ts`).
+
+## Reseñas
+
+Las reseñas se publican solo con tu aprobación y solo de compradores reales:
+
+1. En un pedido marcado **Vendido**, toca **Pedir reseña**: se genera un enlace único (`/resena/<token>`).
+2. Mándaselo al cliente por WhatsApp (el panel trae el botón con el mensaje listo).
+3. El cliente pone estrellas, comentario y el nombre que quiere mostrar (sugerido: "Luis P."). No necesita cuenta.
+4. La reseña queda **pendiente**. En **Reseñas** del panel la aprueba o rechaza; solo las aprobadas salen en el sitio.
+
+El enlace sirve una sola vez, hay una reseña por pedido y el sitio nunca muestra teléfono ni apellido completo.
+Sin reseñas aprobadas, la sección no aparece en el sitio publicado.
+
+## Logo
+
+El logo está en `public/logo.svg` (también es el icono de la pestaña, `app/icon.svg`). El archivo original quedó en
+`assets/logo-original.svg`.
 
 ## Desplegar en Vercel
 

@@ -113,3 +113,31 @@ body {
     animation: none;
   }
 }
+
+/* Selector de estrellas solo con CSS: las estrellas van en orden inverso en el HTML */
+.estrellas {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: flex-end;
+  gap: 0.25rem;
+}
+.estrellas input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+.estrellas label {
+  cursor: pointer;
+  color: var(--linea);
+  padding: 0.125rem;
+}
+.estrellas input:checked ~ label,
+.estrellas label:hover,
+.estrellas label:hover ~ label {
+  color: var(--senal-hondo);
+}
+.estrellas input:focus-visible + label {
+  outline: 3px solid var(--azul);
+  outline-offset: 2px;
+  border-radius: 6px;
+}

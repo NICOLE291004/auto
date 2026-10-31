@@ -16,6 +16,7 @@ import { NEGOCIO } from "@/lib/config";
 import { CarruselPiezas } from "@/components/CarruselPiezas";
 import type { PiezaCardData } from "@/components/PiezaCard";
 import { getPiezasPublicas, rangoAnios } from "@/lib/piezas";
+import { getResenasPublicas } from "@/lib/resenas";
 
 const PASOS = [
   {
@@ -43,10 +44,11 @@ const PIEZAS_DEMO = [
   { marca: "Volkswagen", modelo: "Jetta", anios: "2011–2018", pieza: "Defensa delantera" },
 ];
 
-const RESENAS = [
-  { nombre: "Nombre del cliente", texto: "Texto de la reseña real: qué pieza pidió y cómo fue el trato.", pieza: "Pieza y vehículo" },
-  { nombre: "Nombre del cliente", texto: "Texto de la reseña real: qué pieza pidió y cómo fue el trato.", pieza: "Pieza y vehículo" },
-  { nombre: "Nombre del cliente", texto: "Texto de la reseña real: qué pieza pidió y cómo fue el trato.", pieza: "Pieza y vehículo" },
+// Solo para desarrollo: en producción la sección se oculta hasta que haya reseñas aprobadas.
+const RESENAS_DEMO = [
+  { id: "d1", nombre_publico: "Nombre del cliente", comentario: "Texto de la reseña real: qué pieza pidió y cómo fue el trato.", pieza: "Pieza y vehículo", estrellas: 5 },
+  { id: "d2", nombre_publico: "Nombre del cliente", comentario: "Texto de la reseña real: qué pieza pidió y cómo fue el trato.", pieza: "Pieza y vehículo", estrellas: 5 },
+  { id: "d3", nombre_publico: "Nombre del cliente", comentario: "Texto de la reseña real: qué pieza pidió y cómo fue el trato.", pieza: "Pieza y vehículo", estrellas: 5 },
 ];
 
 const btnSenal =
@@ -56,6 +58,9 @@ export const revalidate = 60;
 
 export default async function Home() {
   const reales = await getPiezasPublicas({ limite: 12 });
+  const resenasReales = await getResenasPublicas(6);
+  const esDemo = resenasReales.length === 0 && process.env.NODE_ENV !== "production";
+  const resenas = esDemo ? RESENAS_DEMO : resenasReales;
   const piezas: PiezaCardData[] =
     reales.length > 0
       ? reales.map((r) => ({ ...r, anios: rangoAnios(r) }))
@@ -242,29 +247,35 @@ export default async function Home() {
           </div>
         </section>
 
-        {/* RESEÑAS */}
-        <section className="bg-niebla py-14 sm:py-20">
-          <div className="mx-auto max-w-6xl px-4 sm:px-6">
-            <h2 className="reveal font-display text-4xl font-extrabold leading-none tracking-tight sm:text-5xl">
-              Lo dicen quienes ya compraron.
-            </h2>
-            <ul className="mt-10 grid gap-5 md:grid-cols-3">
-              {RESENAS.map((r, i) => (
-                <li key={i} className="reveal rounded-3xl bg-white p-6">
-                  <p className="mb-3 inline-block rounded-md border border-dashed border-azul px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider text-azul">
-                    Reseña de ejemplo · reemplazar
-                  </p>
-                  <div className="flex gap-0.5 text-senal-hondo">
-                    {Array.from({ length: 5 }).map((_, k) => <IconEstrella key={k} />)}
-                  </div>
-                  <p className="mt-3 text-lg leading-relaxed">{r.texto}</p>
-                  <p className="mt-4 font-bold">{r.nombre}</p>
-                  <p className="text-sm text-muted">{r.pieza}</p>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </section>
+        {/* RESEÑAS: solo las aprobadas desde el panel */}
+        {resenas.length > 0 && (
+          <section className="bg-niebla py-14 sm:py-20">
+            <div className="mx-auto max-w-6xl px-4 sm:px-6">
+              <h2 className="reveal font-display text-4xl font-extrabold leading-none tracking-tight sm:text-5xl">
+                Lo dicen quienes ya compraron.
+              </h2>
+              <ul className="mt-10 grid gap-5 md:grid-cols-3">
+                {resenas.map((r) => (
+                  <li key={r.id} className="reveal rounded-3xl bg-white p-6">
+                    {esDemo && (
+                      <p className="mb-3 inline-block rounded-md border border-dashed border-azul px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider text-azul">
+                        Reseña de ejemplo · solo en desarrollo
+                      </p>
+                    )}
+                    <div className="flex gap-0.5 text-senal-hondo" aria-label={`${r.estrellas} de 5 estrellas`}>
+                      {Array.from({ length: r.estrellas }).map((_, k) => (
+                        <IconEstrella key={k} />
+                      ))}
+                    </div>
+                    <p className="mt-3 text-lg leading-relaxed">{r.comentario}</p>
+                    <p className="mt-4 font-bold">{r.nombre_publico}</p>
+                    <p className="text-sm text-muted">{r.pieza}</p>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </section>
+        )}
 
         {/* CTA FINAL */}
         <section className="mx-auto max-w-6xl px-4 py-16 text-center sm:px-6 sm:py-24">
