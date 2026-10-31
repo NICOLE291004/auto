@@ -17,14 +17,15 @@ export type Cliente = {
   imagen?: string;
   /** "logo" se ve completo sobre fondo blanco; "foto" (taller, fachada) llena el recuadro. */
   tipo?: "logo" | "foto";
+  /** Color de fondo del recuadro cuando el logo trae fondo propio (por ejemplo oscuro). */
+  fondo?: string;
 };
 
-/** Empresas que nos compran piezas (pasarela de la home). Nombres tal cual los dio el negocio. */
+/** Empresas que confían en nosotros (pasarela de la home). Nombres tal cual los dio el negocio. */
+// Sin foto o logo todavía (se agregan cuando los tengan): David Munguia Refacciones y AUTO USADOS.
 export const CLIENTES: Cliente[] = [
-  { nombre: "Hmo Autocolision", imagen: "/empresas/hmo-autocolision.jpg", tipo: "foto" },
+  { nombre: "Hmo Autocolision", imagen: "/empresas/hmo-autocolision-logo.jpg", tipo: "logo", fondo: "#1a1a1a" },
   { nombre: "Maxcolor's Pinturas y Carrocería", imagen: "/empresas/maxcolor.jpg", tipo: "logo" },
-  { nombre: "David Munguia Refacciones" },
-  { nombre: "AUTO USADOS" },
   { nombre: "Agencia FORD", imagen: "/empresas/agencia-ford.jpg", tipo: "logo" },
   { nombre: "Transportes Hermanos Beltrán de Chihuahua", imagen: "/empresas/transportes-hermanos-beltran.jpg", tipo: "logo" },
 ];
