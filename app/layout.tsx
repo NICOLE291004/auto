@@ -1,10 +1,16 @@
 import type { Metadata, Viewport } from "next";
-import { Bricolage_Grotesque, Instrument_Sans, Geist_Mono } from "next/font/google";
+import { Barlow_Condensed, Bricolage_Grotesque, Instrument_Sans, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
 const bricolage = Bricolage_Grotesque({
   variable: "--font-bricolage",
   subsets: ["latin"],
+});
+// Letras condensadas tipo letrero para los nombres de las empresas.
+const barlow = Barlow_Condensed({
+  variable: "--font-barlow",
+  subsets: ["latin"],
+  weight: ["500", "600", "700"],
 });
 const instrument = Instrument_Sans({
   variable: "--font-instrument",
@@ -30,7 +36,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html
       lang="es-MX"
-      className={`${bricolage.variable} ${instrument.variable} ${mono.variable}`}
+      className={`${bricolage.variable} ${instrument.variable} ${mono.variable} ${barlow.variable}`}
     >
       <body className="min-h-dvh">
         {children}

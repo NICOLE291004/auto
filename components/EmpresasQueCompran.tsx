@@ -1,35 +1,58 @@
 import Image from "next/image";
 import { CLIENTES, type Cliente } from "@/lib/config";
 
+/** Iniciales para las empresas que todavía no tienen logo: "David Munguia Refacciones" -> "DM". */
+function iniciales(nombre: string) {
+  const palabras = nombre.split(/\s+/).filter((p) => p.length > 2 || /^[A-Z]/.test(p));
+  return palabras
+    .slice(0, 2)
+    .map((p) => p.charAt(0).toUpperCase())
+    .join("");
+}
+
 function Tarjeta({ c, copia = false }: { c: Cliente; copia?: boolean }) {
-  const base = "mr-4 shrink-0 rounded-2xl border-2 border-linea bg-white text-ink" + (copia ? " pasarela-copia" : "");
+  const base =
+    "mr-4 flex w-56 shrink-0 flex-col rounded-3xl border border-linea bg-white p-3 shadow-[0_8px_24px_-16px_rgba(11,27,63,0.35)]" +
+    (copia ? " pasarela-copia" : "");
+  const nombre = (
+    <p className="mt-3 flex flex-1 items-center justify-center px-1 pb-1 text-center font-marca text-[1.35rem] font-semibold uppercase leading-[1.05] tracking-[0.06em] text-ink">
+      {c.nombre}
+    </p>
+  );
+
   if (!c.imagen) {
     return (
-      <li aria-hidden={copia || undefined} className={`${base} flex w-64 items-center justify-center px-4 py-5 text-center font-display text-lg font-extrabold uppercase leading-tight tracking-wide`}>
-        {c.nombre}
+      <li aria-hidden={copia || undefined} className={base}>
+        <div className="flex h-28 w-full items-center justify-center rounded-2xl bg-niebla">
+          <span aria-hidden className="flex h-16 w-16 items-center justify-center rounded-full bg-azul font-marca text-3xl font-bold tracking-wide text-white">
+            {iniciales(c.nombre)}
+          </span>
+        </div>
+        {nombre}
       </li>
     );
   }
+
   const logo = c.tipo === "logo";
   return (
-    <li aria-hidden={copia || undefined} className={`${base} w-52 p-3`}>
-      <div className={`relative h-28 w-full overflow-hidden rounded-xl ${logo ? "bg-white" : "bg-niebla"}`}>
+    <li aria-hidden={copia || undefined} className={base}>
+      <div className={`relative h-28 w-full overflow-hidden rounded-2xl ${logo ? "bg-white ring-1 ring-linea" : "bg-niebla"}`}>
         <Image
           src={c.imagen}
           alt={copia ? "" : c.nombre}
           fill
-          sizes="208px"
+          sizes="224px"
           className={logo ? "object-contain p-2" : "object-cover"}
         />
       </div>
-      <p className="mt-3 text-center font-display text-base font-extrabold uppercase leading-tight tracking-wide">{c.nombre}</p>
+      {nombre}
     </li>
   );
 }
 
 /**
- * Pasarela de empresas que nos compran piezas. Corre sola con CSS (sin JavaScript), se detiene al pasar el cursor
- * y, si la persona prefiere menos movimiento, se muestra quieta y en varias filas.
+ * Pasarela horizontal de empresas que nos compran piezas. Corre sola con CSS (sin JavaScript) y se detiene al pasar
+ * el cursor. Si la persona prefiere menos movimiento, no corre sola pero se desliza a mano.
  * Cada empresa puede llevar su logo o una foto de su taller (ver CLIENTES en lib/config.ts).
  */
 export function EmpresasQueCompran() {
@@ -44,7 +67,7 @@ export function EmpresasQueCompran() {
           Empresas que ya confían en nosotros.
         </h2>
       </div>
-      <div className="pasarela mt-8 overflow-hidden">
+      <div className="pasarela mt-8">
         <ul className="pasarela-pista" aria-label="Empresas que nos compran piezas">
           {CLIENTES.map((c) => (
             <Tarjeta key={c.nombre} c={c} />
