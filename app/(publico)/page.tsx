@@ -13,7 +13,8 @@ import {
   IconRed,
 } from "@/components/icons";
 import { NEGOCIO } from "@/lib/config";
-import { PiezaCard, type PiezaCardData } from "@/components/PiezaCard";
+import { CarruselPiezas } from "@/components/CarruselPiezas";
+import type { PiezaCardData } from "@/components/PiezaCard";
 import { getPiezasPublicas, rangoAnios } from "@/lib/piezas";
 
 const PASOS = [
@@ -54,7 +55,7 @@ const btnSenal =
 export const revalidate = 60;
 
 export default async function Home() {
-  const reales = await getPiezasPublicas({ limite: 4 });
+  const reales = await getPiezasPublicas({ limite: 12 });
   const piezas: PiezaCardData[] =
     reales.length > 0
       ? reales.map((r) => ({ ...r, anios: rangoAnios(r) }))
@@ -111,6 +112,37 @@ export default async function Home() {
           </div>
         </section>
 
+        {/* PIEZAS DISPONIBLES: justo debajo del hero para que se vean de entrada */}
+        {piezas.length > 0 && (
+          <section className="mt-6 py-10 sm:mt-10 sm:py-14" aria-labelledby="piezas-titulo">
+            <div className="mx-auto max-w-6xl px-4 sm:px-6">
+              <div className="flex items-end justify-between gap-4">
+                <div>
+                  <p className="mb-2 inline-flex items-center gap-2 rounded-full bg-rojo/10 px-3 py-1 font-mono text-[11px] uppercase tracking-widest text-rojo-hondo">
+                    <span className="h-2 w-2 rounded-full bg-rojo" /> Recién publicadas
+                  </p>
+                  <h2
+                    id="piezas-titulo"
+                    className="font-display text-4xl font-extrabold leading-none tracking-tight sm:text-6xl"
+                  >
+                    Piezas disponibles
+                  </h2>
+                  <p className="mt-3 max-w-lg text-lg text-muted">
+                    Desliza y pregunta el precio de la que necesites. Te contestamos al momento.
+                  </p>
+                </div>
+                <Link
+                  href="/piezas"
+                  className="hidden shrink-0 items-center gap-1.5 font-bold text-azul hover:underline sm:inline-flex"
+                >
+                  Ver todas <IconFlecha width={18} height={18} />
+                </Link>
+              </div>
+              <CarruselPiezas piezas={piezas} />
+            </div>
+          </section>
+        )}
+
         {/* CIFRAS */}
         <section className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
           <dl className="grid grid-cols-3 gap-4 text-center sm:gap-8">
@@ -156,36 +188,6 @@ export default async function Home() {
             <TrustBadges />
           </div>
         </section>
-
-        {/* PIEZAS DISPONIBLES */}
-        {piezas.length > 0 && (
-        <section className="bg-niebla py-14 sm:py-20">
-          <div className="mx-auto max-w-6xl px-4 sm:px-6">
-            <div className="flex items-end justify-between gap-4">
-              <div>
-                <h2 className="reveal font-display text-4xl font-extrabold leading-none tracking-tight sm:text-6xl">
-                  Piezas disponibles
-                </h2>
-                <p className="reveal mt-3 max-w-lg text-lg text-muted">
-                  Piezas listas para consultar. Pregunta el precio y te contestamos al momento.
-                </p>
-              </div>
-              <Link href="/piezas" className="hidden shrink-0 items-center gap-1.5 font-bold text-azul hover:underline sm:inline-flex">
-                Ver todas <IconFlecha width={18} height={18} />
-              </Link>
-            </div>
-
-            <ul className="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-              {piezas.map((p) => (
-                <PiezaCard key={`${p.marca}-${p.modelo}-${p.pieza}`} p={p} />
-              ))}
-            </ul>
-            <Link href="/piezas" className="mt-6 inline-flex items-center gap-1.5 font-bold text-azul sm:hidden">
-              Ver todas <IconFlecha width={18} height={18} />
-            </Link>
-          </div>
-        </section>
-        )}
 
         {/* GARANTÍA */}
         <section className="mx-auto max-w-6xl px-4 py-14 sm:px-6 sm:py-20">

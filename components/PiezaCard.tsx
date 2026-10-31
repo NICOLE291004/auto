@@ -12,9 +12,9 @@ export type PiezaCardData = {
 };
 
 /** Tarjeta pública. Nunca muestra precio ni datos del yunkero. */
-export function PiezaCard({ p }: { p: PiezaCardData }) {
+export function PiezaCard({ p, className = "reveal" }: { p: PiezaCardData; className?: string }) {
   return (
-    <li className="reveal lift overflow-hidden rounded-3xl bg-white">
+    <li className={`lift overflow-hidden rounded-3xl bg-white ${className}`}>
       {p.foto_url ? (
         <div className="relative aspect-[4/3] bg-niebla">
           <Image
