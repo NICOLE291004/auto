@@ -2,7 +2,7 @@
 
 Sitio de Alex Autopartes (Hermosillo, Sonora; envíos a todo México). Next.js (App Router) + TypeScript + Tailwind + Supabase.
 
-Estado: **Fase 1 (sitio público)** y **Fase 2 (panel admin)** listas. Fase 3 (IA/webhook) pendiente.
+Estado: **Fase 1 (sitio público)** y **Fase 2 (panel admin)** listas. Fase 3 (IA y webhook de WhatsApp) tiene la arquitectura preparada pero **no está activa**: ver [`docs/FASE-3.md`](docs/FASE-3.md).
 
 ## Correrlo en local
 
@@ -20,8 +20,9 @@ igual puede continuar por WhatsApp.
 ## Configurar Supabase
 
 1. Crea un proyecto en supabase.com.
-2. En **SQL Editor** ejecuta [`supabase/migrations/0001_init.sql`](supabase/migrations/0001_init.sql). Crea tablas,
-   la vista pública, las políticas RLS y los buckets `piezas` (público) y `pedidos` (privado).
+2. En **SQL Editor** ejecuta, en orden, [`0001_init.sql`](supabase/migrations/0001_init.sql) (tablas, vista pública,
+   políticas RLS y buckets `piezas` público y `pedidos` privado) y [`0002_ingesta.sql`](supabase/migrations/0002_ingesta.sql)
+   (bandeja de la Fase 3; es opcional hasta que se active).
 3. Opcional, solo desarrollo: ejecuta `supabase/seed.sql` para ver piezas de ejemplo.
 4. Copia la URL, la `anon key` y la `service_role key` a `.env.local` (ver `.env.example`).
 
