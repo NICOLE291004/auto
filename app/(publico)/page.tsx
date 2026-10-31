@@ -242,11 +242,12 @@ export default async function Home() {
                 WhatsApp cuando nos necesites.
               </p>
               <p>
-                Nos preocupamos por tus piezas como si fueran nuestras. Tú dinos qué necesitas y
-                déjalo en manos del equipo Alex.
+                Alex Autopartes comenzó con una meta. Después de malos tratos, pérdida de tiempo y piezas sin
+                garantía, decidimos implementar una solución: creamos un equipo que te conecta con yonkes de
+                todo México a la rapidez de un clic.
               </p>
-              <p className="rounded-xl border border-dashed border-azul px-3 py-2 font-mono text-xs uppercase tracking-wider text-azul">
-                Texto provisional · reemplazar con la historia real del equipo
+              <p className="font-semibold text-ink">
+                Hoy solo necesitas hacer tu solicitud, y nosotros nos preocupamos por tus piezas.
               </p>
             </div>
           </div>
