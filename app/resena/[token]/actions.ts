@@ -14,20 +14,33 @@ export async function enviarResena(token: string, formData: FormData) {
   const db = supabaseServicio();
   if (!db) redirect(`/resena/${token}?error=guardar`);
 
-  // Foto opcional. Solo se sube si el enlace sigue vigente (la reseña no se ha enviado antes).
-  let foto_url: string | null = null;
-  const foto = formData.get("foto");
-  if (foto instanceof File && foto.size > 0) {
-    if (foto.size > FOTO_MAX_BYTES || !FOTO_TIPOS.includes(foto.type)) redirect(`/resena/${token}?error=foto`);
-    const { data: vigente } = await db.from("resenas").select("id").eq("token", token).eq("estado", "solicitada").maybeSingle();
+  // Fotos opcionales: de la pieza ("foto") y de perfil ("avatar"). Se validan todas antes de subir nada.
+  const archivos = (["foto", "avatar"] as const)
+    .map((campo) => ({ campo, archivo: formData.get(campo) }))
+    .filter((x): x is { campo: "foto" | "avatar"; archivo: File } => x.archivo instanceof File && x.archivo.size > 0);
+  for (const { archivo } of archivos) {
+    if (archivo.size > FOTO_MAX_BYTES || !FOTO_TIPOS.includes(archivo.type)) redirect(`/resena/${token}?error=foto`);
+  }
+
+  const urls: { foto_url?: string; avatar_url?: string } = {};
+  if (archivos.length > 0) {
+    // Solo se sube si el enlace sigue vigente (la reseña no se ha enviado antes).
+    const { data: vigente } = await db
+      .from("resenas")
+      .select("id")
+      .eq("token", token)
+      .eq("estado", "solicitada")
+      .maybeSingle();
     if (!vigente) redirect(`/resena/${token}`);
-    const path = `${randomUUID()}.${foto.type.split("/")[1]}`;
-    const { error: errFoto } = await db.storage.from("resenas").upload(path, foto, { contentType: foto.type });
-    if (errFoto) {
-      console.error("enviarResena foto:", errFoto.message);
-      redirect(`/resena/${token}?error=foto`);
+    for (const { campo, archivo } of archivos) {
+      const path = `${randomUUID()}.${archivo.type.split("/")[1]}`;
+      const { error: errFoto } = await db.storage.from("resenas").upload(path, archivo, { contentType: archivo.type });
+      if (errFoto) {
+        console.error(`enviarResena ${campo}:`, errFoto.message);
+        redirect(`/resena/${token}?error=foto`);
+      }
+      urls[campo === "foto" ? "foto_url" : "avatar_url"] = db.storage.from("resenas").getPublicUrl(path).data.publicUrl;
     }
-    foto_url = db.storage.from("resenas").getPublicUrl(path).data.publicUrl;
   }
 
   // El filtro por estado hace que el enlace solo sirva una vez.
@@ -39,8 +52,8 @@ export async function enviarResena(token: string, formData: FormData) {
       nombre_publico: r.data.nombre,
       estado: "pendiente",
       enviada_en: new Date().toISOString(),
-      // Solo se escribe si hay foto, para que enviar sin foto no dependa de la migración 0004.
-      ...(foto_url ? { foto_url } : {}),
+      // Solo se escriben si hay foto, para que enviar sin fotos no dependa de las migraciones 0004 y 0005.
+      ...urls,
     })
     .eq("token", token)
     .eq("estado", "solicitada")

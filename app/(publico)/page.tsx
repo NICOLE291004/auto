@@ -14,6 +14,7 @@ import {
   IconRed,
 } from "@/components/icons";
 import { NEGOCIO } from "@/lib/config";
+import { AvatarResena } from "@/components/AvatarResena";
 import { CarruselPiezas } from "@/components/CarruselPiezas";
 import type { PiezaCardData } from "@/components/PiezaCard";
 import { getPiezasPublicas, rangoAnios } from "@/lib/piezas";
@@ -47,9 +48,9 @@ const PIEZAS_DEMO = [
 
 // Solo para desarrollo: en producción la sección se oculta hasta que haya reseñas aprobadas.
 const RESENAS_DEMO = [
-  { id: "d1", nombre_publico: "Nombre del cliente", comentario: "Texto de la reseña real: qué pieza pidió y cómo fue el trato.", pieza: "Pieza y vehículo", estrellas: 5, foto_url: null as string | null },
-  { id: "d2", nombre_publico: "Nombre del cliente", comentario: "Texto de la reseña real: qué pieza pidió y cómo fue el trato.", pieza: "Pieza y vehículo", estrellas: 5, foto_url: null as string | null },
-  { id: "d3", nombre_publico: "Nombre del cliente", comentario: "Texto de la reseña real: qué pieza pidió y cómo fue el trato.", pieza: "Pieza y vehículo", estrellas: 5, foto_url: null as string | null },
+  { id: "d1", nombre_publico: "Nombre del cliente", comentario: "Texto de la reseña real: qué pieza pidió y cómo fue el trato.", pieza: "Pieza y vehículo", estrellas: 5, foto_url: null as string | null, avatar_url: null as string | null },
+  { id: "d2", nombre_publico: "Nombre del cliente", comentario: "Texto de la reseña real: qué pieza pidió y cómo fue el trato.", pieza: "Pieza y vehículo", estrellas: 5, foto_url: null as string | null, avatar_url: null as string | null },
+  { id: "d3", nombre_publico: "Nombre del cliente", comentario: "Texto de la reseña real: qué pieza pidió y cómo fue el trato.", pieza: "Pieza y vehículo", estrellas: 5, foto_url: null as string | null, avatar_url: null as string | null },
 ];
 
 const btnSenal =
@@ -274,8 +275,13 @@ export default async function Home() {
                       ))}
                     </div>
                     <p className="mt-3 text-lg leading-relaxed">{r.comentario}</p>
-                    <p className="mt-4 font-bold">{r.nombre_publico}</p>
-                    <p className="text-sm text-muted">{r.pieza}</p>
+                    <div className="mt-4 flex items-center gap-3">
+                      <AvatarResena url={r.avatar_url} nombre={r.nombre_publico} />
+                      <div className="min-w-0">
+                        <p className="truncate font-bold">{r.nombre_publico}</p>
+                        <p className="truncate text-sm text-muted">{r.pieza}</p>
+                      </div>
+                    </div>
                   </li>
                 ))}
               </ul>

@@ -90,12 +90,18 @@ export default async function ResenaPage({
             placeholder="¿Qué pieza pediste y cómo fue el trato?"
           />
         </label>
-        <FotoOpcional />
+        <FotoOpcional etiqueta="Agregar foto de tu pieza (opcional)" />
         <label className="block">
           <span className="mb-1.5 block text-sm font-bold text-muted">Nombre que aparecerá en el sitio</span>
           <input className={inputCls} name="nombre" maxLength={40} required defaultValue={resena.nombre_sugerido} />
           <span className="mt-1 block text-sm text-muted">No publicamos tu teléfono. Puedes usar solo tu nombre.</span>
         </label>
+        <div>
+          <FotoOpcional nombre="avatar" etiqueta="Agregar tu foto de perfil (opcional)" />
+          <span className="mt-1 block text-sm text-muted">
+            Se verá en un círculo pequeño junto a tu nombre. Si la subes, aceptas que aparezca en el sitio.
+          </span>
+        </div>
         <Guardar>Enviar reseña</Guardar>
       </form>
     );

@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Aviso } from "@/components/admin/Aviso";
+import { AvatarResena } from "@/components/AvatarResena";
 import { IconEstrella } from "@/components/icons";
 import { requireAdmin } from "@/lib/auth";
 import { aprobarResena, rechazarResena } from "./actions";
@@ -16,6 +17,7 @@ type Fila = {
   estado: "solicitada" | "pendiente" | "aprobada" | "rechazada";
   enviada_en: string | null;
   foto_url: string | null;
+  avatar_url: string | null;
 };
 
 const TITULOS = {
@@ -76,12 +78,17 @@ export default async function ResenasPage({
                     </div>
                   )}
                   {r.comentario && <p className="mt-2 text-lg leading-snug">{r.comentario}</p>}
-                  <p className="mt-2 font-bold">{r.nombre_publico ?? r.nombre_sugerido}</p>
-                  <p className="text-sm text-muted">
-                    <Link href={`/admin/pedidos/${r.pedido_id}`} className="underline">
-                      {r.pieza}
-                    </Link>
-                  </p>
+                  <div className="mt-3 flex items-center gap-3">
+                    <AvatarResena url={r.avatar_url} nombre={r.nombre_publico ?? r.nombre_sugerido} />
+                    <div className="min-w-0">
+                      <p className="truncate font-bold">{r.nombre_publico ?? r.nombre_sugerido}</p>
+                      <p className="truncate text-sm text-muted">
+                        <Link href={`/admin/pedidos/${r.pedido_id}`} className="underline">
+                          {r.pieza}
+                        </Link>
+                      </p>
+                    </div>
+                  </div>
                   {estado === "pendiente" && (
                     <div className="mt-3 grid grid-cols-2 gap-2">
                       <form action={aprobarResena.bind(null, r.id)}>

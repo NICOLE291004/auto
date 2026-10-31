@@ -9,6 +9,7 @@ export type ResenaPublica = {
   pieza: string;
   enviada_en: string;
   foto_url: string | null;
+  avatar_url: string | null;
 };
 
 /** "Luis Pérez García" -> "Luis P." Nunca muestra el apellido completo. */
@@ -47,7 +48,7 @@ export async function getResenasPublicas(limite = 6): Promise<ResenaPublica[]> {
   if (!db) return [];
   const { data, error } = await db
     .from("resenas_publicas")
-    .select("id, nombre_publico, estrellas, comentario, pieza, enviada_en, foto_url")
+    .select("id, nombre_publico, estrellas, comentario, pieza, enviada_en, foto_url, avatar_url")
     .order("enviada_en", { ascending: false })
     .limit(limite);
   if (error) {
