@@ -1,26 +1,115 @@
 @import "tailwindcss";
 
+/* Paleta de marca. Cambia aquí y se actualiza todo el sitio. */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --ink: #0b1b3f; /* azul tinta: texto y fondos oscuros */
+  --azul: #1448e0; /* azul de marca */
+  --azul-hondo: #0e36b0;
+  --niebla: #eef3ff; /* superficies claras */
+  --linea: #dce3f2;
+  --muted: #4a5878;
+  --rojo: #e4162b; /* acento: botones principales */
+  --rojo-hondo: #bf0f22;
+  --senal: #ffc21a; /* detalles: estrellas y marcas */
+  --senal-hondo: #f0ae00;
+  --wa: #25d366;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --color-ink: var(--ink);
+  --color-azul: var(--azul);
+  --color-azul-hondo: var(--azul-hondo);
+  --color-niebla: var(--niebla);
+  --color-linea: var(--linea);
+  --color-muted: var(--muted);
+  --color-rojo: var(--rojo);
+  --color-rojo-hondo: var(--rojo-hondo);
+  --color-senal: var(--senal);
+  --color-senal-hondo: var(--senal-hondo);
+  --color-wa: var(--wa);
+  --font-display: var(--font-bricolage);
+  --font-sans: var(--font-instrument);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: #fff;
+  color: var(--ink);
+  font-family: var(--font-instrument), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+:focus-visible {
+  outline: 3px solid var(--azul);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+/* Marcador de foto real que el dueño reemplazará */
+.foto-slot {
+  background-color: var(--niebla);
+  background-image: repeating-linear-gradient(
+    135deg,
+    transparent 0 14px,
+    rgba(20, 72, 224, 0.07) 14px 15px
+  );
+}
+
+/* Transición entre pasos del formulario */
+@keyframes paso-entra {
+  from {
+    opacity: 0;
+    transform: translateX(18px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.paso {
+  animation: paso-entra 0.32s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+/* Aparición al hacer scroll: solo CSS, sin JS. Si el navegador no lo soporta, todo se ve normal. */
+@keyframes sube {
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .reveal {
+      animation: sube linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 35%;
+    }
+  }
+  .lift {
+    transition:
+      transform 0.25s cubic-bezier(0.2, 0.7, 0.2, 1),
+      box-shadow 0.25s;
+  }
+  .lift:hover,
+  .lift:active {
+    transform: translateY(-4px);
+    box-shadow: 0 18px 40px -18px rgba(11, 27, 63, 0.35);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .paso {
+    animation: none;
+  }
 }
