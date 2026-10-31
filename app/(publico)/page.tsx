@@ -1,5 +1,7 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { JsonLd } from "@/components/JsonLd";
 import { SiteHeader, SiteFooter } from "@/components/SiteChrome";
 import { SearchStepper } from "@/components/SearchStepper";
 import { TrustBadges } from "@/components/TrustBadges";
@@ -12,6 +14,7 @@ import {
   IconFlecha,
   IconRed,
 } from "@/components/icons";
+import { siteUrl } from "@/lib/catalogo";
 import { NEGOCIO } from "@/lib/config";
 import { AvatarResena } from "@/components/AvatarResena";
 import { CarruselPiezas } from "@/components/CarruselPiezas";
@@ -59,6 +62,10 @@ const btnSenal =
 
 export const revalidate = 60;
 
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+};
+
 export default async function Home() {
   const reales = await getPiezasPublicas({ limite: 12 });
   const resenas = await getResenasPublicas(6);
@@ -70,6 +77,18 @@ export default async function Home() {
         : [];
   return (
     <>
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "AutoPartsStore",
+          name: NEGOCIO.nombre,
+          url: siteUrl(),
+          image: `${siteUrl()}/logo.svg`,
+          telephone: `+${NEGOCIO.whatsapp}`,
+          areaServed: "MX",
+          address: { "@type": "PostalAddress", addressLocality: "Hermosillo", addressRegion: "Sonora", addressCountry: "MX" },
+        }}
+      />
       <SiteHeader solicitarHref="#buscador" />
 
       <main>
@@ -108,15 +127,15 @@ export default async function Home() {
                 <p className="mt-4 max-w-md font-display text-2xl font-extrabold leading-tight sm:text-3xl">
                   Tú tranquilo. <span className="text-senal">Nosotros nos encargamos de tus piezas.</span>
                 </p>
-                <div className="mt-6 hidden lg:block">
-                  <TrustBadges dark />
-                </div>
               </div>
 
               <SearchStepper />
             </div>
           </div>
         </section>
+
+        {/* EMPRESAS: la prueba social más fuerte, justo debajo del hero */}
+        <EmpresasQueCompran />
 
         {/* PIEZAS DISPONIBLES: justo debajo del hero para que se vean de entrada */}
         {piezas.length > 0 && (
@@ -149,22 +168,6 @@ export default async function Home() {
           </section>
         )}
 
-        {/* CIFRAS */}
-        <section className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
-          <dl className="grid grid-cols-3 gap-4 text-center sm:gap-8">
-            {[
-              [`+${NEGOCIO.aniosExperiencia}`, "años consiguiendo piezas"],
-              ["100%", "por WhatsApp, sin vueltas"],
-              ["Todo México", "envíos a cualquier estado"],
-            ].map(([n, l]) => (
-              <div key={l}>
-                <dt className="font-display text-3xl font-extrabold text-azul sm:text-5xl">{n}</dt>
-                <dd className="mt-1 text-[13px] leading-snug text-muted sm:text-base">{l}</dd>
-              </div>
-            ))}
-          </dl>
-        </section>
-
         {/* CÓMO FUNCIONA */}
         <section className="mx-auto max-w-6xl px-4 py-10 sm:px-6 sm:py-16">
           <h2 className="reveal max-w-xl font-display text-4xl font-extrabold leading-none tracking-tight sm:text-6xl">
@@ -191,7 +194,6 @@ export default async function Home() {
             <a href="#buscador" className={btnSenal}>
               Solicita tu pieza <IconFlecha width={20} height={20} />
             </a>
-            <TrustBadges />
           </div>
         </section>
 
@@ -251,9 +253,6 @@ export default async function Home() {
             </div>
           </div>
         </section>
-
-        {/* EMPRESAS QUE NOS COMPRAN */}
-        <EmpresasQueCompran />
 
         {/* RESEÑAS: solo las aprobadas desde el panel. Sin reseñas queda únicamente el botón para escribir una. */}
         <section className="bg-niebla py-14 sm:py-20">

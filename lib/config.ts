@@ -41,6 +41,12 @@ export const MARCAS = [
   "Mazda",
   "Kia",
   "Hyundai",
+  "RAM",
+  "GMC",
+  "Jeep",
+  "Chrysler",
+  "Mitsubishi",
+  "Suzuki",
 ];
 
 export const MODELOS: Record<string, string[]> = {
@@ -54,6 +60,12 @@ export const MODELOS: Record<string, string[]> = {
   Mazda: ["Mazda 3", "Mazda 6", "CX-5", "CX-7", "Mazda 2"],
   Kia: ["Rio", "Forte", "Sportage", "Sorento", "Soul"],
   Hyundai: ["Accent", "Elantra", "Tucson", "Santa Fe", "i10"],
+  RAM: ["1500", "2500", "700", "ProMaster", "Rebel"],
+  GMC: ["Sierra", "Terrain", "Acadia", "Yukon"],
+  Jeep: ["Wrangler", "Grand Cherokee", "Compass", "Patriot", "Liberty"],
+  Chrysler: ["Town & Country", "300", "PT Cruiser", "Pacifica"],
+  Mitsubishi: ["L200", "Lancer", "Outlander", "ASX", "Mirage"],
+  Suzuki: ["Swift", "Vitara", "Grand Vitara", "Ertiga", "Ignis"],
 };
 
 export const PIEZAS_COMUNES = [

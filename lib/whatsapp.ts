@@ -33,3 +33,6 @@ export function waCliente(numero: string, texto?: string) {
   const completo = digitos.length === 10 ? `52${digitos}` : digitos;
   return `https://wa.me/${completo}${texto ? `?text=${encodeURIComponent(texto)}` : ""}`;
 }
+
+/** Primer mensaje con huecos para que llegue útil desde el botón flotante y el pie de página. */
+export const PLANTILLA_WHATSAPP = ["Hola, busco una pieza:", "• Vehículo (marca, modelo y año): ", "• Pieza: "].join("\n");

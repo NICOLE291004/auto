@@ -1,10 +1,10 @@
 import { IconWhatsApp } from "./icons";
-import { waLink } from "@/lib/whatsapp";
+import { PLANTILLA_WHATSAPP, waLink } from "@/lib/whatsapp";
 
 export function WhatsAppFloat() {
   return (
     <a
-      href={waLink("Hola, busco una pieza para mi vehículo.")}
+      href={waLink(PLANTILLA_WHATSAPP)}
       target="_blank"
       rel="noopener"
       aria-label="Escríbenos por WhatsApp"

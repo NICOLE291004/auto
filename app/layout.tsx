@@ -26,6 +26,16 @@ export const metadata: Metadata = {
   title: "Autopartes usadas en Hermosillo | Alex Autopartes",
   description:
     "Te conseguimos la pieza que buscas, rápido y con garantía. Autopartes usadas desde Hermosillo, Sonora, con envíos a todo México, garantía y respuesta rápida por WhatsApp.",
+  // Vista previa al compartir el enlace (WhatsApp, Facebook). La imagen sale de app/opengraph-image.tsx.
+  openGraph: {
+    type: "website",
+    locale: "es_MX",
+    siteName: "Alex Autopartes",
+    title: "Alex Autopartes: te conseguimos la pieza que buscas",
+    description:
+      "Autopartes usadas desde Hermosillo, Sonora. Pides en un minuto y te atendemos por WhatsApp. Envíos a todo México.",
+  },
+  twitter: { card: "summary_large_image" },
 };
 
 export const viewport: Viewport = {
