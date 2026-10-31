@@ -2,7 +2,7 @@
 
 Sitio de Alex Autopartes (Hermosillo, Sonora; envíos a todo México). Next.js (App Router) + TypeScript + Tailwind + Supabase.
 
-Estado: **Fase 1 (sitio público)** lista. Fase 2 (panel admin) y Fase 3 (IA/webhook) pendientes.
+Estado: **Fase 1 (sitio público)** y **Fase 2 (panel admin)** listas. Fase 3 (IA/webhook) pendiente.
 
 ## Correrlo en local
 
@@ -30,6 +30,30 @@ igual puede continuar por WhatsApp.
 El sitio público **solo** lee la vista `piezas_publicas`, que no incluye yunkero, `precio_yunkero` ni notas. El rol
 `anon` no tiene acceso a las tablas. Los pedidos del sitio se guardan desde el servidor con la service role key.
 
+## Panel de administración (`/admin`)
+
+Solo pueden entrar 2 administradores. Para darlos de alta:
+
+1. En Supabase → **Authentication → Providers → Email**, desactiva **Allow new users to sign up**.
+2. En **Authentication → Users → Add user**, crea las 2 cuentas (correo + contraseña, marca *Auto confirm*).
+3. En el **SQL Editor**, autorízalas (cambia los correos):
+
+```sql
+insert into public.admins (user_id, email)
+select id, email from auth.users where email in ('uno@correo.com', 'dos@correo.com');
+```
+
+Quien tenga cuenta pero no esté en `admins` no ve nada: el login la rechaza y las políticas RLS bloquean las tablas.
+
+Qué hay en el panel:
+
+- **Inicio:** pedidos de la semana, tasa de cierre (vendidos ÷ pedidos recibidos del periodo), ganancia total y ventas por origen.
+- **Pedidos:** filtro por estado, captura rápida desde el celular, origen, precio de venta, costo del yunkero y ganancia calculada.
+- **Piezas:** alta con foto, yunkero (privado) y `precio_yunkero` opcional. Vencen a los 10 días y se pueden renovar.
+- **Yunkeros:** privados.
+- **Coincidencias:** pedidos abiertos (nuevo o cotizado) con una pieza vigente de la misma marca, modelo, año y tipo de pieza.
+  Se calculan al abrir el panel, así que una pieza nueva dispara la alerta de inmediato (lógica en `lib/matching.ts`).
+
 ## Desplegar en Vercel
 
 1. Sube el repo a GitHub e impórtalo en Vercel.
@@ -44,9 +68,11 @@ Revisa `lib/config.ts` antes de publicar: número de WhatsApp, años de experien
 ## Estructura
 
 ```
-app/            páginas (home, /solicitar, /piezas, /piezas/[marca]/[modelo]), sitemap y robots
+app/(publico)/  sitio público (home, /solicitar, /piezas, /piezas/[marca]/[modelo])
+app/admin/      panel (login y páginas protegidas); proxy.ts hace la revisión rápida de sesión
+app/            sitemap y robots
 components/     UI (buscador por pasos, tarjetas, encabezado)
-lib/            config, slug, WhatsApp, validación, acceso a datos
+lib/            config, slug, WhatsApp, validación, acceso a datos, expiración, coincidencias y estadísticas
 supabase/       migraciones y seed
 tests/          pruebas (Vitest)
 ```

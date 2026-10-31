@@ -86,3 +86,30 @@ export const IconWhatsApp = (p: SVGProps<SVGSVGElement>) => (
     <path d="M12.04 2a9.9 9.9 0 0 0-8.5 14.9L2 22l5.3-1.4A9.9 9.9 0 1 0 12.04 2Zm0 1.8a8.1 8.1 0 1 1-4.3 15l-.3-.2-3.1.8.8-3-.2-.3A8.1 8.1 0 0 1 12.04 3.8Zm-3 4.2c-.2 0-.5.1-.7.3-.3.3-1 1-1 2.4s1 2.8 1.2 3c.1.2 2 3.1 4.9 4.3 2.4 1 2.9.8 3.4.7.5 0 1.7-.7 1.9-1.4.2-.7.2-1.3.2-1.4-.1-.1-.3-.2-.6-.4l-1.9-.9c-.3-.1-.5-.1-.7.1l-.9 1.1c-.2.2-.3.2-.6.1-.3-.1-1.2-.4-2.3-1.4-.8-.8-1.4-1.7-1.5-2-.2-.3 0-.4.1-.6l.4-.5.3-.5c.1-.2 0-.4 0-.5l-.9-2.1c-.2-.5-.4-.5-.6-.5Z" />
   </svg>
 );
+
+export const IconPanel = (p: SVGProps<SVGSVGElement>) => (
+  <Base {...p}>
+    <path d="M4 20V10M10 20V4M16 20v-7M22 20H2" />
+  </Base>
+);
+export const IconLista = (p: SVGProps<SVGSVGElement>) => (
+  <Base {...p}>
+    <path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01" />
+  </Base>
+);
+export const IconGente = (p: SVGProps<SVGSVGElement>) => (
+  <Base {...p}>
+    <circle cx="9" cy="8" r="3.2" />
+    <path d="M3 20c.6-3.4 3-5 6-5s5.4 1.6 6 5M16 5.2a3.2 3.2 0 0 1 0 5.6M18 15.3c1.6.6 2.7 2 3 4.7" />
+  </Base>
+);
+export const IconCampana = (p: SVGProps<SVGSVGElement>) => (
+  <Base {...p}>
+    <path d="M6 9a6 6 0 1 1 12 0c0 6 2 7 2 7H4s2-1 2-7ZM10 20a2 2 0 0 0 4 0" />
+  </Base>
+);
+export const IconMas = (p: SVGProps<SVGSVGElement>) => (
+  <Base {...p}>
+    <path d="M12 5v14M5 12h14" />
+  </Base>
+);

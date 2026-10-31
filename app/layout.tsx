@@ -1,7 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Bricolage_Grotesque, Instrument_Sans, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { WhatsAppFloat } from "@/components/WhatsAppFloat";
 
 const bricolage = Bricolage_Grotesque({
   variable: "--font-bricolage",
@@ -35,7 +34,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     >
       <body className="min-h-dvh">
         {children}
-        <WhatsAppFloat />
       </body>
     </html>
   );

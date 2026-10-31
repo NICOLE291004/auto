@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { crearPedido } from "@/app/solicitar/actions";
+import { crearPedido } from "@/app/(publico)/solicitar/actions";
 import { MARCAS, MODELOS, PIEZAS_COMUNES } from "@/lib/config";
 import { mensajePedido, waLink } from "@/lib/whatsapp";
 import { TrustBadges } from "./TrustBadges";
