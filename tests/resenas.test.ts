@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { descripcionPieza, mensajeResena, nombreSugerido, resenaSchema, urlResena } from "../lib/resenas";
+import { descripcionPieza, mensajeResena, nombreSugerido, resenaAbiertaSchema, resenaSchema, urlResena } from "../lib/resenas";
 
 describe("reseñas", () => {
   it("sugiere un nombre público sin apellido completo", () => {
@@ -34,5 +34,15 @@ describe("reseñas", () => {
     expect(resenaSchema.safeParse({ ...ok, comentario: "ok" }).success).toBe(false);
     expect(resenaSchema.safeParse({ ...ok, comentario: "x".repeat(501) }).success).toBe(false);
     expect(resenaSchema.safeParse({ ...ok, nombre: " " }).success).toBe(false);
+  });
+
+  it("la reseña abierta exige WhatsApp válido y usa un texto por defecto si no dicen la pieza", () => {
+    const base = { estrellas: "5", comentario: "Muy buen servicio, rápido.", nombre: "Luis P.", whatsapp: "(662) 111-2233", pieza: "" };
+    const ok = resenaAbiertaSchema.parse(base);
+    expect(ok.whatsapp).toBe("6621112233");
+    expect(ok.pieza).toBe("Compra en Alex Autopartes");
+    expect(resenaAbiertaSchema.safeParse({ ...base, whatsapp: "123" }).success).toBe(false);
+    expect(resenaAbiertaSchema.safeParse({ ...base, whatsapp: "" }).success).toBe(false);
+    expect(resenaAbiertaSchema.parse({ ...base, pieza: "Faro Sentra" }).pieza).toBe("Faro Sentra");
   });
 });

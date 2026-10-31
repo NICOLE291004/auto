@@ -42,6 +42,19 @@ export const resenaSchema = z.object({
   nombre: z.string().trim().min(2).max(40),
 });
 
+/** Reseña escrita directo en el sitio: pide el WhatsApp (privado) para que el admin pueda confirmar la compra. */
+export const resenaAbiertaSchema = resenaSchema.extend({
+  whatsapp: z
+    .string()
+    .transform((v) => v.replace(/\D/g, ""))
+    .pipe(z.string().regex(/^\d{10,15}$/, "WhatsApp inválido")),
+  pieza: z
+    .string()
+    .trim()
+    .max(80)
+    .transform((v) => (v === "" ? "Compra en Alex Autopartes" : v)),
+});
+
 /** Reseñas aprobadas. Si falla o no hay Supabase, devuelve []. */
 export async function getResenasPublicas(limite = 6): Promise<ResenaPublica[]> {
   const db = supabasePublico();

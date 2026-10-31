@@ -68,6 +68,11 @@ Las reseñas se publican solo con tu aprobación y solo de compradores reales:
 4. La reseña queda **pendiente**. En **Reseñas** del panel la aprueba o rechaza; solo las aprobadas salen en el sitio.
 
 El enlace sirve una sola vez, hay una reseña por pedido y el sitio nunca muestra teléfono ni apellido completo.
+
+También hay un botón **Escribir reseña** en la home: el cliente la escribe ahí mismo (estrellas, comentario, fotos
+opcionales, nombre y su WhatsApp, que **no se publica**). Entra como pendiente y en **Reseñas** aparece marcada
+"Escrita en el sitio: compra sin comprobar", con un botón para confirmar la compra por WhatsApp antes de aprobarla.
+Requiere la migración [`0006_resenas_abiertas.sql`](supabase/migrations/0006_resenas_abiertas.sql).
 Sin reseñas aprobadas, la sección no aparece en el sitio publicado.
 
 ## Logo

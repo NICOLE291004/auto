@@ -4,11 +4,12 @@ import { Aviso } from "@/components/admin/Aviso";
 import { AvatarResena } from "@/components/AvatarResena";
 import { IconEstrella } from "@/components/icons";
 import { requireAdmin } from "@/lib/auth";
+import { waCliente } from "@/lib/whatsapp";
 import { aprobarResena, rechazarResena } from "./actions";
 
 type Fila = {
   id: string;
-  pedido_id: string;
+  pedido_id: string | null;
   pieza: string;
   nombre_publico: string | null;
   nombre_sugerido: string;
@@ -18,6 +19,8 @@ type Fila = {
   enviada_en: string | null;
   foto_url: string | null;
   avatar_url: string | null;
+  contacto: string | null;
+  fuente: "enlace" | "sitio";
 };
 
 const TITULOS = {
@@ -83,12 +86,34 @@ export default async function ResenasPage({
                     <div className="min-w-0">
                       <p className="truncate font-bold">{r.nombre_publico ?? r.nombre_sugerido}</p>
                       <p className="truncate text-sm text-muted">
-                        <Link href={`/admin/pedidos/${r.pedido_id}`} className="underline">
-                          {r.pieza}
-                        </Link>
+                        {r.pedido_id ? (
+                          <Link href={`/admin/pedidos/${r.pedido_id}`} className="underline">
+                            {r.pieza}
+                          </Link>
+                        ) : (
+                          r.pieza
+                        )}
                       </p>
                     </div>
                   </div>
+                  {r.fuente === "sitio" && (
+                    <div className="mt-3 rounded-2xl bg-niebla p-3 text-sm">
+                      <p className="font-bold text-ink">Escrita en el sitio: compra sin comprobar</p>
+                      {r.contacto && (
+                        <a
+                          href={waCliente(
+                            r.contacto,
+                            `Hola ${r.nombre_publico ?? r.nombre_sugerido}, gracias por tu reseña en Alex Autopartes. ¿Nos confirmas qué pieza compraste?`,
+                          )}
+                          target="_blank"
+                          rel="noopener"
+                          className="mt-1 inline-block font-bold text-azul underline"
+                        >
+                          Confirmar compra por WhatsApp ({r.contacto})
+                        </a>
+                      )}
+                    </div>
+                  )}
                   {estado === "pendiente" && (
                     <div className="mt-3 grid grid-cols-2 gap-2">
                       <form action={aprobarResena.bind(null, r.id)}>

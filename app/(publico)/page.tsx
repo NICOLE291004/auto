@@ -12,15 +12,14 @@ import {
   IconEstrella,
   IconFlecha,
   IconRed,
-  IconWhatsApp,
 } from "@/components/icons";
 import { NEGOCIO } from "@/lib/config";
 import { AvatarResena } from "@/components/AvatarResena";
 import { CarruselPiezas } from "@/components/CarruselPiezas";
+import { FormularioResena } from "@/components/FormularioResena";
 import type { PiezaCardData } from "@/components/PiezaCard";
 import { getPiezasPublicas, rangoAnios } from "@/lib/piezas";
 import { getResenasPublicas } from "@/lib/resenas";
-import { mensajeQuieroResena, waLink } from "@/lib/whatsapp";
 
 const PASOS = [
   {
@@ -279,21 +278,7 @@ export default async function Home() {
                 ))}
               </ul>
             )}
-            <div className={resenas.length > 0 ? "mt-10 text-center" : "mt-5"}>
-              {resenas.length === 0 && (
-                <p className="mb-5 max-w-lg text-lg text-muted">
-                  Cuéntanos cómo te fue. Te mandamos un enlace para que dejes tu reseña.
-                </p>
-              )}
-              <a
-                href={waLink(mensajeQuieroResena())}
-                target="_blank"
-                rel="noopener"
-                className="inline-flex items-center justify-center gap-2 rounded-2xl bg-rojo px-6 py-4 text-lg font-bold text-white transition-colors hover:bg-rojo-hondo"
-              >
-                <IconWhatsApp width={22} height={22} /> Escribir reseña
-              </a>
-            </div>
+            <FormularioResena sinResenas={resenas.length === 0} />
           </div>
         </section>
 
