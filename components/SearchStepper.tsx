@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { crearPedido } from "@/app/(publico)/solicitar/actions";
-import { MARCAS, MODELOS, PIEZAS_COMUNES } from "@/lib/config";
+import { MARCAS, MODELOS, NEGOCIO, PIEZAS_COMUNES } from "@/lib/config";
 import { mensajePedido, waLink } from "@/lib/whatsapp";
 import { TrustBadges } from "./TrustBadges";
 import { IconAtras, IconCamara, IconCheck, IconFlecha, IconWhatsApp } from "./icons";
@@ -288,6 +288,7 @@ function Exito({ d }: { d: Datos }) {
         {d.pieza} para {d.marca} {d.modelo} {d.anio}. Toca el botón para mandarnos el resumen
         por WhatsApp y empezar la búsqueda ahora.
       </p>
+      <p className="mt-2 text-[15px] text-muted">Atendemos por WhatsApp de {NEGOCIO.horario}.</p>
       <a
         href={waLink(mensajePedido(d))}
         target="_blank"

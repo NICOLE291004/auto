@@ -4,7 +4,10 @@ export const NEGOCIO = {
   nombre: "Alex Autopartes",
   ciudad: "Hermosillo, Sonora",
   /** PROVISIONAL: número de WhatsApp en formato internacional, sin "+" ni espacios. */
-  whatsapp: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "526621234567",
+  // Si falta la variable de entorno, se usa el número real del negocio (nunca uno de ejemplo).
+  whatsapp: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "526621191235",
+  /** Horas en que se responde por WhatsApp. */
+  horario: "9:00 am a 7:00 pm",
   /** PROVISIONAL */
   aniosExperiencia: 8,
   /** PROVISIONAL: texto de la garantía. */

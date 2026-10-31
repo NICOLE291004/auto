@@ -44,6 +44,9 @@ export function SiteFooter() {
             </a>
           </p>
           <p>
+            Recibimos solicitudes a cualquier hora. Atención por WhatsApp de {NEGOCIO.horario}.
+          </p>
+          <p>
             Cel.{" "}
             <a href={`tel:+${NEGOCIO.whatsapp}`} className="font-bold text-ink">
               {telefonoLegible(NEGOCIO.whatsapp)}
