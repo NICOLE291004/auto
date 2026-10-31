@@ -17,6 +17,7 @@ const mono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3100"),
   title: "Autopartes usadas en Hermosillo | Alex Autopartes",
   description:
     "Te conseguimos la pieza que buscas, rápido y con garantía. Autopartes usadas desde Hermosillo, Sonora, con envíos a todo México, garantía y respuesta rápida por WhatsApp.",

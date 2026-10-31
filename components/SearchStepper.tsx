@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
+import { crearPedido } from "@/app/solicitar/actions";
 import { MARCAS, MODELOS, PIEZAS_COMUNES } from "@/lib/config";
 import { mensajePedido, waLink } from "@/lib/whatsapp";
 import { TrustBadges } from "./TrustBadges";
@@ -35,11 +36,14 @@ const chipCls =
 const botonCls =
   "inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-rojo px-6 py-4 text-lg font-bold text-white transition-colors hover:bg-rojo-hondo disabled:cursor-not-allowed disabled:opacity-40 sm:w-auto";
 
-export function SearchStepper() {
-  const [paso, setPaso] = useState(0);
-  const [d, setD] = useState<Datos>(VACIO);
-  const [foto, setFoto] = useState<string | null>(null);
+export function SearchStepper({ inicial }: { inicial?: { marca?: string; modelo?: string } }) {
+  const conVehiculo = Boolean(inicial?.marca && inicial?.modelo);
+  const [paso, setPaso] = useState(conVehiculo ? 2 : inicial?.marca ? 1 : 0);
+  const [d, setD] = useState<Datos>({ ...VACIO, marca: inicial?.marca ?? "", modelo: inicial?.modelo ?? "" });
+  const [foto, setFoto] = useState<File | null>(null);
   const [enviado, setEnviado] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [enviando, iniciarEnvio] = useTransition();
 
   const set = (k: keyof Datos, v: string) => setD((p) => ({ ...p, [k]: v }));
   const siguiente = () => setPaso((p) => Math.min(p + 1, TOTAL - 1));
@@ -60,8 +64,18 @@ export function SearchStepper() {
     e.preventDefault();
     if (!listo) return;
     if (paso < TOTAL - 1) return siguiente();
-    // FASE 1: aquí se guardará el pedido en Supabase (Server Action) antes de mostrar el botón.
-    setEnviado(true);
+    setError(null);
+    const fd = new FormData(e.currentTarget as HTMLFormElement);
+    fd.set("marca", d.marca);
+    fd.set("modelo", d.modelo);
+    fd.set("anio", d.anio);
+    fd.set("pieza", d.pieza);
+    if (foto) fd.set("foto", foto);
+    iniciarEnvio(async () => {
+      const r = await crearPedido(fd);
+      if (r.ok) setEnviado(true);
+      else setError(r.error);
+    });
   }
 
   return (
@@ -176,12 +190,12 @@ export function SearchStepper() {
                 />
                 <label className="flex cursor-pointer items-center gap-3 rounded-2xl border-2 border-dashed border-linea p-3 text-[15px] font-semibold text-azul hover:bg-niebla">
                   <IconCamara width={22} height={22} />
-                  {foto ? "Foto lista. Toca para cambiarla" : "Agregar foto (opcional)"}
+                  {foto ? `Foto lista: ${foto.name}` : "Agregar foto (opcional)"}
                   <input
                     type="file"
                     accept="image/*"
                     className="sr-only"
-                    onChange={(e) => setFoto(e.target.files?.[0]?.name ?? null)}
+                    onChange={(e) => setFoto(e.target.files?.[0] ?? null)}
                   />
                 </label>
               </div>
@@ -189,12 +203,14 @@ export function SearchStepper() {
 
             {paso === 4 && (
               <div className="mt-5 grid gap-3">
+                <input type="text" name="sitio_web" tabIndex={-1} autoComplete="off" aria-hidden className="absolute -left-[9999px] h-0 w-0 opacity-0" />
                 <input
                   className={inputCls}
                   placeholder="Tu nombre"
                   value={d.nombre}
                   onChange={(e) => set("nombre", e.target.value)}
                   aria-label="Nombre"
+                  name="nombre"
                   autoComplete="name"
                   autoFocus
                 />
@@ -204,6 +220,7 @@ export function SearchStepper() {
                   value={d.whatsapp}
                   onChange={(e) => set("whatsapp", e.target.value)}
                   aria-label="WhatsApp"
+                  name="whatsapp"
                   type="tel"
                   inputMode="tel"
                   autoComplete="tel"
@@ -214,6 +231,7 @@ export function SearchStepper() {
                   value={d.ubicacion}
                   onChange={(e) => set("ubicacion", e.target.value)}
                   aria-label="Colonia o ciudad"
+                  name="ubicacion"
                   autoComplete="address-level2"
                 />
               </div>
@@ -232,11 +250,16 @@ export function SearchStepper() {
                 </button>
               )}
             </div>
-            <button type="submit" className={botonCls} disabled={!listo}>
-              {paso === TOTAL - 1 ? "Enviar mi pedido" : "Continuar"}
+            <button type="submit" className={botonCls} disabled={!listo || enviando}>
+              {enviando ? "Enviando…" : paso === TOTAL - 1 ? "Enviar mi pedido" : "Continuar"}
               <IconFlecha width={20} height={20} />
             </button>
           </div>
+          {error && (
+            <p role="alert" className="mt-4 rounded-xl bg-rojo/10 px-4 py-3 text-[15px] font-semibold text-rojo-hondo">
+              {error}
+            </p>
+          )}
           <div className="mt-5 border-t border-linea pt-4">
             <TrustBadges />
           </div>

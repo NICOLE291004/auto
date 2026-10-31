@@ -4,7 +4,7 @@ export const NEGOCIO = {
   nombre: "Alex Autopartes",
   ciudad: "Hermosillo, Sonora",
   /** PROVISIONAL: número de WhatsApp en formato internacional, sin "+" ni espacios. */
-  whatsapp: "526621234567",
+  whatsapp: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "526621234567",
   /** PROVISIONAL */
   aniosExperiencia: 8,
   /** PROVISIONAL: texto de la garantía. */
