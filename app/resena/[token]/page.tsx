@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Fragment } from "react";
 import { Guardar, inputCls } from "@/components/admin/ui";
+import { FotoOpcional } from "@/components/FotoOpcional";
 import { IconCheck, IconEstrella } from "@/components/icons";
 import { SiteFooter, SiteHeader } from "@/components/SiteChrome";
 import { supabaseServicio } from "@/lib/supabase/admin";
@@ -45,7 +46,7 @@ export default async function ResenaPage({
           <IconCheck width={30} height={30} />
         </span>
         <h1 className="mt-4 font-display text-3xl font-extrabold">¡Gracias por tu reseña!</h1>
-        <p className="mt-3 text-lg text-muted">La revisamos y, si todo está bien, la publicamos en el sitio.</p>
+        <p className="mt-3 text-lg text-muted">Nos ayuda mucho a seguir mejorando.</p>
       </>
     );
   } else {
@@ -59,7 +60,9 @@ export default async function ResenaPage({
           <p role="alert" className="rounded-2xl bg-rojo/10 px-4 py-3 font-semibold text-rojo-hondo">
             {error === "datos"
               ? "Elige las estrellas y cuéntanos un poco más (mínimo 10 letras)."
-              : "No pudimos guardar tu reseña. Intenta de nuevo."}
+              : error === "foto"
+                ? "La foto debe ser JPG, PNG o WebP de máximo 5 MB."
+                : "No pudimos guardar tu reseña. Intenta de nuevo."}
           </p>
         )}
         <fieldset>
@@ -87,6 +90,7 @@ export default async function ResenaPage({
             placeholder="¿Qué pieza pediste y cómo fue el trato?"
           />
         </label>
+        <FotoOpcional />
         <label className="block">
           <span className="mb-1.5 block text-sm font-bold text-muted">Nombre que aparecerá en el sitio</span>
           <input className={inputCls} name="nombre" maxLength={40} required defaultValue={resena.nombre_sugerido} />

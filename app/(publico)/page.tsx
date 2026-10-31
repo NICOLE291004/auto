@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { SiteHeader, SiteFooter } from "@/components/SiteChrome";
 import { SearchStepper } from "@/components/SearchStepper";
@@ -46,9 +47,9 @@ const PIEZAS_DEMO = [
 
 // Solo para desarrollo: en producción la sección se oculta hasta que haya reseñas aprobadas.
 const RESENAS_DEMO = [
-  { id: "d1", nombre_publico: "Nombre del cliente", comentario: "Texto de la reseña real: qué pieza pidió y cómo fue el trato.", pieza: "Pieza y vehículo", estrellas: 5 },
-  { id: "d2", nombre_publico: "Nombre del cliente", comentario: "Texto de la reseña real: qué pieza pidió y cómo fue el trato.", pieza: "Pieza y vehículo", estrellas: 5 },
-  { id: "d3", nombre_publico: "Nombre del cliente", comentario: "Texto de la reseña real: qué pieza pidió y cómo fue el trato.", pieza: "Pieza y vehículo", estrellas: 5 },
+  { id: "d1", nombre_publico: "Nombre del cliente", comentario: "Texto de la reseña real: qué pieza pidió y cómo fue el trato.", pieza: "Pieza y vehículo", estrellas: 5, foto_url: null as string | null },
+  { id: "d2", nombre_publico: "Nombre del cliente", comentario: "Texto de la reseña real: qué pieza pidió y cómo fue el trato.", pieza: "Pieza y vehículo", estrellas: 5, foto_url: null as string | null },
+  { id: "d3", nombre_publico: "Nombre del cliente", comentario: "Texto de la reseña real: qué pieza pidió y cómo fue el trato.", pieza: "Pieza y vehículo", estrellas: 5, foto_url: null as string | null },
 ];
 
 const btnSenal =
@@ -261,6 +262,11 @@ export default async function Home() {
                       <p className="mb-3 inline-block rounded-md border border-dashed border-azul px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider text-azul">
                         Reseña de ejemplo · solo en desarrollo
                       </p>
+                    )}
+                    {r.foto_url && (
+                      <div className="relative mb-4 aspect-[4/3] overflow-hidden rounded-2xl bg-niebla">
+                        <Image src={r.foto_url} alt={`Foto de ${r.pieza}`} fill sizes="(min-width:768px) 33vw, 100vw" className="object-cover" />
+                      </div>
                     )}
                     <div className="flex gap-0.5 text-senal-hondo" aria-label={`${r.estrellas} de 5 estrellas`}>
                       {Array.from({ length: r.estrellas }).map((_, k) => (

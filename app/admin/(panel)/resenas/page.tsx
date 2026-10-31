@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { Aviso } from "@/components/admin/Aviso";
 import { IconEstrella } from "@/components/icons";
@@ -14,6 +15,7 @@ type Fila = {
   comentario: string | null;
   estado: "solicitada" | "pendiente" | "aprobada" | "rechazada";
   enviada_en: string | null;
+  foto_url: string | null;
 };
 
 const TITULOS = {
@@ -59,6 +61,13 @@ export default async function ResenasPage({
             <ul className="space-y-3">
               {lista.map((r) => (
                 <li key={r.id} className="rounded-3xl bg-white p-4">
+                  {r.foto_url && (
+                    <a href={r.foto_url} target="_blank" rel="noopener" className="mb-3 block">
+                      <span className="relative block aspect-[4/3] overflow-hidden rounded-2xl bg-niebla">
+                        <Image src={r.foto_url} alt={`Foto de ${r.pieza}`} fill sizes="(min-width:768px) 600px, 100vw" className="object-cover" />
+                      </span>
+                    </a>
+                  )}
                   {r.estrellas && (
                     <div className="flex gap-0.5 text-senal-hondo" aria-label={`${r.estrellas} de 5 estrellas`}>
                       {Array.from({ length: r.estrellas }).map((_, k) => (
