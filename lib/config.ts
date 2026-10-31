@@ -21,12 +21,12 @@ export type Cliente = {
 
 /** Empresas que nos compran piezas (pasarela de la home). Nombres tal cual los dio el negocio. */
 export const CLIENTES: Cliente[] = [
-  { nombre: "HMO CARROCERIA" },
-  { nombre: "MAX COLORS" },
-  { nombre: "DAVID MUNGUIA" },
+  { nombre: "Hmo Autocolision", imagen: "/empresas/hmo-autocolision.jpg", tipo: "foto" },
+  { nombre: "Maxcolor's Pinturas y Carrocería", imagen: "/empresas/maxcolor.jpg", tipo: "logo" },
+  { nombre: "David Munguia Refacciones" },
   { nombre: "AUTO USADOS" },
-  { nombre: "AGENCIA FORD OBREGON" },
-  { nombre: "Hermanos Beltrán de Chihuahua" },
+  { nombre: "Agencia FORD", imagen: "/empresas/agencia-ford.jpg", tipo: "logo" },
+  { nombre: "Transportes Hermanos Beltrán de Chihuahua", imagen: "/empresas/transportes-hermanos-beltran.jpg", tipo: "logo" },
 ];
 
 export const MARCAS = [

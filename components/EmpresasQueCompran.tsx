@@ -5,7 +5,7 @@ function Tarjeta({ c, copia = false }: { c: Cliente; copia?: boolean }) {
   const base = "mr-4 shrink-0 rounded-2xl border-2 border-linea bg-white text-ink" + (copia ? " pasarela-copia" : "");
   if (!c.imagen) {
     return (
-      <li aria-hidden={copia || undefined} className={`${base} px-6 py-4 font-display text-xl font-extrabold uppercase tracking-wide`}>
+      <li aria-hidden={copia || undefined} className={`${base} flex w-64 items-center justify-center px-4 py-5 text-center font-display text-lg font-extrabold uppercase leading-tight tracking-wide`}>
         {c.nombre}
       </li>
     );
