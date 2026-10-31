@@ -3,7 +3,6 @@ import Link from "next/link";
 import { SiteHeader, SiteFooter } from "@/components/SiteChrome";
 import { SearchStepper } from "@/components/SearchStepper";
 import { TrustBadges } from "@/components/TrustBadges";
-import { PhotoSlot } from "@/components/PhotoSlot";
 import {
   IconBuscar,
   IconCheck,
@@ -16,10 +15,17 @@ import {
 import { NEGOCIO } from "@/lib/config";
 import { AvatarResena } from "@/components/AvatarResena";
 import { CarruselPiezas } from "@/components/CarruselPiezas";
+import { EmpresasQueCompran } from "@/components/EmpresasQueCompran";
+import { GaleriaEquipo, type FotoGaleria } from "@/components/GaleriaEquipo";
 import { FormularioResena } from "@/components/FormularioResena";
 import type { PiezaCardData } from "@/components/PiezaCard";
 import { getPiezasPublicas, rangoAnios } from "@/lib/piezas";
 import { getResenasPublicas } from "@/lib/resenas";
+
+// Fotos reales (public/fotos). Con más de una, la galería avanza sola y muestra puntos.
+const FOTOS_TRABAJO: FotoGaleria[] = [
+  { src: "/fotos/galeria-envio.jpg", alt: "Camioneta cargada con una pieza grande envuelta y marcada como frágil" },
+];
 
 const PASOS = [
   {
@@ -214,7 +220,7 @@ export default async function Home() {
         {/* QUIÉNES SOMOS */}
         <section className="mx-auto grid max-w-6xl items-center gap-10 px-4 pb-14 sm:px-6 sm:pb-20 md:grid-cols-[0.85fr_1fr]">
           <div className="reveal relative">
-            <PhotoSlot label="el equipo Alex en el mostrador o taller" className="aspect-[4/5] rounded-[2rem]" />
+            <GaleriaEquipo fotos={FOTOS_TRABAJO} className="aspect-square" />
             <div className="absolute -bottom-5 right-4 rounded-2xl bg-azul px-5 py-3 text-white shadow-xl sm:-right-4">
               <p className="font-display text-4xl font-extrabold leading-none">+{NEGOCIO.aniosExperiencia}</p>
               <p className="text-sm text-white/85">años de experiencia</p>
@@ -245,6 +251,9 @@ export default async function Home() {
             </div>
           </div>
         </section>
+
+        {/* EMPRESAS QUE NOS COMPRAN */}
+        <EmpresasQueCompran />
 
         {/* RESEÑAS: solo las aprobadas desde el panel. Sin reseñas queda únicamente el botón para escribir una. */}
         <section className="bg-niebla py-14 sm:py-20">

@@ -11,6 +11,16 @@ export const NEGOCIO = {
   garantia: "Si la pieza no es la que pediste o llega con falla, te la cambiamos.",
 };
 
+/** Empresas que nos compran piezas (pasarela de la home). Escritas tal cual las dio el negocio. */
+export const CLIENTES = [
+  "HMO CARROCERIA",
+  "MAX COLORS",
+  "DAVID MUNGUIA",
+  "AUTO USADOS",
+  "AGENCIA FORD OBREGON",
+  "Hermanos Beltrán de Chihuahua",
+];
+
 export const MARCAS = [
   "Nissan",
   "Chevrolet",

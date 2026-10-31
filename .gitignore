@@ -44,3 +44,6 @@ next-env.d.ts
 
 # Claude Code
 .claude/
+
+# Fotos originales (sin recortar ni limpiar); el sitio usa las de public/fotos
+assets/originales/
