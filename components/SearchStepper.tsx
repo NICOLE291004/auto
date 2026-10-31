@@ -175,7 +175,13 @@ export function SearchStepper({ inicial }: { inicial?: { marca?: string; modelo?
               <div className="mt-5 space-y-4">
                 <div className="flex flex-wrap gap-2">
                   {PIEZAS_COMUNES.map((p) => (
-                    <button key={p} type="button" className={chipCls} onClick={() => elegir("pieza", p)}>
+                    <button
+                      key={p}
+                      type="button"
+                      aria-pressed={d.pieza === p}
+                      className={`${chipCls} ${d.pieza === p ? "!border-azul !bg-niebla" : ""}`}
+                      onClick={() => set("pieza", p)}
+                    >
                       {p}
                     </button>
                   ))}
