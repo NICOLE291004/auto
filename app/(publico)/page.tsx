@@ -12,6 +12,7 @@ import {
   IconEstrella,
   IconFlecha,
   IconRed,
+  IconWhatsApp,
 } from "@/components/icons";
 import { NEGOCIO } from "@/lib/config";
 import { AvatarResena } from "@/components/AvatarResena";
@@ -19,6 +20,7 @@ import { CarruselPiezas } from "@/components/CarruselPiezas";
 import type { PiezaCardData } from "@/components/PiezaCard";
 import { getPiezasPublicas, rangoAnios } from "@/lib/piezas";
 import { getResenasPublicas } from "@/lib/resenas";
+import { mensajeQuieroResena, waLink } from "@/lib/whatsapp";
 
 const PASOS = [
   {
@@ -46,12 +48,6 @@ const PIEZAS_DEMO = [
   { marca: "Volkswagen", modelo: "Jetta", anios: "2011–2018", pieza: "Defensa delantera" },
 ];
 
-// Solo para desarrollo: en producción la sección se oculta hasta que haya reseñas aprobadas.
-const RESENAS_DEMO = [
-  { id: "d1", nombre_publico: "Nombre del cliente", comentario: "Texto de la reseña real: qué pieza pidió y cómo fue el trato.", pieza: "Pieza y vehículo", estrellas: 5, foto_url: null as string | null, avatar_url: null as string | null },
-  { id: "d2", nombre_publico: "Nombre del cliente", comentario: "Texto de la reseña real: qué pieza pidió y cómo fue el trato.", pieza: "Pieza y vehículo", estrellas: 5, foto_url: null as string | null, avatar_url: null as string | null },
-  { id: "d3", nombre_publico: "Nombre del cliente", comentario: "Texto de la reseña real: qué pieza pidió y cómo fue el trato.", pieza: "Pieza y vehículo", estrellas: 5, foto_url: null as string | null, avatar_url: null as string | null },
-];
 
 const btnSenal =
   "inline-flex items-center justify-center gap-2 rounded-2xl bg-rojo px-6 py-4 text-lg font-bold text-white transition-colors hover:bg-rojo-hondo";
@@ -60,9 +56,7 @@ export const revalidate = 60;
 
 export default async function Home() {
   const reales = await getPiezasPublicas({ limite: 12 });
-  const resenasReales = await getResenasPublicas(6);
-  const esDemo = resenasReales.length === 0 && process.env.NODE_ENV !== "production";
-  const resenas = esDemo ? RESENAS_DEMO : resenasReales;
+  const resenas = await getResenasPublicas(6);
   const piezas: PiezaCardData[] =
     reales.length > 0
       ? reales.map((r) => ({ ...r, anios: rangoAnios(r) }))
@@ -253,21 +247,16 @@ export default async function Home() {
           </div>
         </section>
 
-        {/* RESEÑAS: solo las aprobadas desde el panel */}
-        {resenas.length > 0 && (
-          <section className="bg-niebla py-14 sm:py-20">
-            <div className="mx-auto max-w-6xl px-4 sm:px-6">
-              <h2 className="reveal font-display text-4xl font-extrabold leading-none tracking-tight sm:text-5xl">
-                Lo dicen quienes ya compraron.
-              </h2>
+        {/* RESEÑAS: solo las aprobadas desde el panel. Sin reseñas queda únicamente el botón para escribir una. */}
+        <section className="bg-niebla py-14 sm:py-20">
+          <div className="mx-auto max-w-6xl px-4 sm:px-6">
+            <h2 className="reveal font-display text-4xl font-extrabold leading-none tracking-tight sm:text-5xl">
+              {resenas.length > 0 ? "Lo dicen quienes ya compraron." : "¿Ya compraste con nosotros?"}
+            </h2>
+            {resenas.length > 0 && (
               <ul className="mt-10 grid gap-5 md:grid-cols-3">
                 {resenas.map((r) => (
                   <li key={r.id} className="reveal rounded-3xl bg-white p-6">
-                    {esDemo && (
-                      <p className="mb-3 inline-block rounded-md border border-dashed border-azul px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider text-azul">
-                        Reseña de ejemplo · solo en desarrollo
-                      </p>
-                    )}
                     {r.foto_url && (
                       <div className="relative mb-4 aspect-[4/3] overflow-hidden rounded-2xl bg-niebla">
                         <Image src={r.foto_url} alt={`Foto de ${r.pieza}`} fill sizes="(min-width:768px) 33vw, 100vw" className="object-cover" />
@@ -289,9 +278,24 @@ export default async function Home() {
                   </li>
                 ))}
               </ul>
+            )}
+            <div className={resenas.length > 0 ? "mt-10 text-center" : "mt-5"}>
+              {resenas.length === 0 && (
+                <p className="mb-5 max-w-lg text-lg text-muted">
+                  Cuéntanos cómo te fue. Te mandamos un enlace para que dejes tu reseña.
+                </p>
+              )}
+              <a
+                href={waLink(mensajeQuieroResena())}
+                target="_blank"
+                rel="noopener"
+                className="inline-flex items-center justify-center gap-2 rounded-2xl bg-rojo px-6 py-4 text-lg font-bold text-white transition-colors hover:bg-rojo-hondo"
+              >
+                <IconWhatsApp width={22} height={22} /> Escribir reseña
+              </a>
             </div>
-          </section>
-        )}
+          </div>
+        </section>
 
         {/* CTA FINAL */}
         <section className="mx-auto max-w-6xl px-4 py-16 text-center sm:px-6 sm:py-24">

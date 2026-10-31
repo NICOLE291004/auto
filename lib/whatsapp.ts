@@ -33,3 +33,8 @@ export function waCliente(numero: string, texto?: string) {
   const completo = digitos.length === 10 ? `52${digitos}` : digitos;
   return `https://wa.me/${completo}${texto ? `?text=${encodeURIComponent(texto)}` : ""}`;
 }
+
+/** Mensaje del botón "Escribir reseña" de la home: el cliente pide su enlace único por WhatsApp. */
+export function mensajeQuieroResena() {
+  return "Hola, ya compré con ustedes y quiero dejar mi reseña. ¿Me mandan el enlace?";
+}
