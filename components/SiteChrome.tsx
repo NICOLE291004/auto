@@ -3,7 +3,7 @@ import { Logo } from "@/components/Logo";
 import { NEGOCIO } from "@/lib/config";
 import { getPiezasPublicas } from "@/lib/piezas";
 import { waLink } from "@/lib/whatsapp";
-import { PLANTILLA_WHATSAPP } from "@/lib/whatsapp";
+import { PLANTILLA_WHATSAPP, telefonoLegible } from "@/lib/whatsapp";
 
 export async function SiteHeader({ solicitarHref = "/solicitar" }: { solicitarHref?: string }) {
   // El enlace a "Piezas disponibles" solo aparece cuando hay piezas vigentes; vacío se leería como negocio abandonado.
@@ -41,6 +41,12 @@ export function SiteFooter() {
             Autopartes usadas con envíos a todo México.{" "}
             <a href={waLink(PLANTILLA_WHATSAPP)} target="_blank" rel="noopener" className="font-bold text-azul underline">
               Escríbenos por WhatsApp
+            </a>
+          </p>
+          <p>
+            Cel.{" "}
+            <a href={`tel:+${NEGOCIO.whatsapp}`} className="font-bold text-ink">
+              {telefonoLegible(NEGOCIO.whatsapp)}
             </a>
           </p>
         </div>

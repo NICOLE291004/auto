@@ -36,3 +36,9 @@ export function waCliente(numero: string, texto?: string) {
 
 /** Primer mensaje con huecos para que llegue útil desde el botón flotante y el pie de página. */
 export const PLANTILLA_WHATSAPP = ["Hola, busco una pieza:", "• Vehículo (marca, modelo y año): ", "• Pieza: "].join("\n");
+
+/** "526621191235" -> "662 119 1235" (últimos 10 dígitos, para mostrarlo en el sitio). */
+export function telefonoLegible(numero: string) {
+  const d = numero.replace(/\D/g, "").slice(-10);
+  return d.length === 10 ? `${d.slice(0, 3)} ${d.slice(3, 6)} ${d.slice(6)}` : numero;
+}
